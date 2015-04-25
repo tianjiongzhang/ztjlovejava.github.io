@@ -70,9 +70,29 @@
 
   <section class="post" itemscope itemprop="blogPost">
   
-    <a href="/2015/03/28/rbd-librbd/" title="qemu-rbd 环境配置" itemprop="url">
+    <a href="/2015/03/29/Ceph-rbd-cmd/" title="ceph-rbd 常用命令" itemprop="url">
   
-    <h1 itemprop="name">qemu-rbd 环境配置</h1>
+    <h1 itemprop="name">ceph-rbd 常用命令</h1>
+    
+     
+           <p itemprop="description" >1.列出池下面的镜像情况
+1# rbd ls [-l] &amp;lt;pool name&amp;gt;
+
+-l 参数类似 ls -l 一样，列出更详细的信息，包括镜像的大小，快照等
+
+2.建立一个镜像
+1# rbd create –image-format 2 &amp;lt;poolname/im</p>
+        
+    
+    <time datetime="2015-03-29T12:12:33.000Z" itemprop="datePublished">Mar 29 2015</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2015/03/28/rbd-librbd/" title="ceph-rbd环境配置(二)之qemu-rbd" itemprop="url">
+  
+    <h1 itemprop="name">ceph-rbd环境配置(二)之qemu-rbd</h1>
     
      
            <p itemprop="description" >上一篇文章讲了Ceph rbd为主机提供块设备的配置，本篇继续分享Ceph rbd为虚拟机提供块设备的配置。如上图所示：qemu调用librbd为虚拟机提供虚拟块设备，为了能够创建和管理虚拟机，需要安装libvirt。libvirt提供管理各种虚拟机通用接口，支持命令和图形方式（</p>
@@ -84,9 +104,9 @@
 
   <section class="post" itemscope itemprop="blogPost">
   
-    <a href="/2015/03/25/rbd-kernel/" title="ceph-rbd环境配置之Linux kernel" itemprop="url">
+    <a href="/2015/03/25/rbd-kernel/" title="ceph-rbd环境配置(一)之Linux kernel" itemprop="url">
   
-    <h1 itemprop="name">ceph-rbd环境配置之Linux kernel</h1>
+    <h1 itemprop="name">ceph-rbd环境配置(一)之Linux kernel</h1>
     
      
            <p itemprop="description" >Ceph提供统一、高性能、高可用的分布式存储服务。所谓统一存储即支持对象存储（OBS）、块存储（EBS）、文件存储。本章主要介绍块存储的环境搭建。块存储即ceph -rbd,如上图所示，rbd是基于librados提供块设备接口。有两种具体的实现:一是Linux kernel直接</p>
@@ -139,7 +159,7 @@
 	<p class="asidetitle">分類</p>
 		<ul>
 		
-			<li><a href="/categories/ceph/" title="ceph">ceph<sup>2</sup></a></li>
+			<li><a href="/categories/ceph/" title="ceph">ceph<sup>3</sup></a></li>
 		
 			<li><a href="/categories/hexo/" title="hexo">hexo<sup>2</sup></a></li>
 		
@@ -152,7 +172,7 @@
 	<p class="asidetitle">標簽</p>
 		<ul class="clearfix">
 		
-			<li><a href="/tags/ceph-rbd/" title="ceph rbd">ceph rbd<sup>2</sup></a></li>
+			<li><a href="/tags/ceph-rbd/" title="ceph rbd">ceph rbd<sup>3</sup></a></li>
 		
 			<li><a href="/tags/hexo/" title="hexo">hexo<sup>2</sup></a></li>
 		
@@ -170,11 +190,15 @@
   <ul class="entry">
     
       <li>
-        <a href="/2015/03/28/rbd-librbd/">qemu-rbd 环境配置</a>
+        <a href="/2015/03/29/Ceph-rbd-cmd/">ceph-rbd 常用命令</a>
       </li>
     
       <li>
-        <a href="/2015/03/25/rbd-kernel/">ceph-rbd环境配置之Linux kernel</a>
+        <a href="/2015/03/28/rbd-librbd/">ceph-rbd环境配置(二)之qemu-rbd</a>
+      </li>
+    
+      <li>
+        <a href="/2015/03/25/rbd-kernel/">ceph-rbd环境配置(一)之Linux kernel</a>
       </li>
     
       <li>

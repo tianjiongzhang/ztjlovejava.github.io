@@ -4,14 +4,18 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>用Hexo構建個性化博客(續) | I have a dream</title>
+    <title>ceph-rbd 常用命令 | I have a dream</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="ztjlovejava">
     
-    <meta name="description" content="發佈博客到github.io依賴1.首先需要在github上註冊，註冊后創建新的Repository。名字一般為yourname.github.io
-2.打開hexo _config.yml文件,deploy；屬性下配置github地址
-12345deploy:  type: github  rep">
+    <meta name="description" content="1.列出池下面的镜像情况
+1# rbd ls [-l] &amp;lt;pool name&amp;gt;
+
+-l 参数类似 ls -l 一样，列出更详细的信息，包括镜像的大小，快照等
+
+2.建立一个镜像
+1# rbd create –image-format 2 &amp;lt;poolname/imagename&amp;gt">
     
     
     
@@ -73,15 +77,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/01/04/hello-hexo-2/" title="用Hexo構建個性化博客(續)" itemprop="url">用Hexo構建個性化博客(續)</a>
+      <a href="/2015/03/29/Ceph-rbd-cmd/" title="ceph-rbd 常用命令" itemprop="url">ceph-rbd 常用命令</a>
   </h1>
   <p class="article-author">By
     
       <a href="https://ztjlovejava.github.io" title="ztjlovejava">ztjlovejava</a>
     </p>
   <p class="article-time">
-    <time datetime="2015-01-04T13:27:27.000Z" itemprop="datePublished">Jan 4 2015</time>
-    更新日期:<time datetime="2015-01-08T14:11:04.000Z" itemprop="dateModified">Jan 8 2015</time>
+    <time datetime="2015-03-29T12:12:33.000Z" itemprop="datePublished">Mar 29 2015</time>
+    更新日期:<time datetime="2015-04-25T15:16:18.000Z" itemprop="dateModified">Apr 25 2015</time>
     
   </p>
 </header>
@@ -90,39 +94,89 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#發佈博客到github-io"><span class="toc-number">1.</span> <span class="toc-text">發佈博客到github.io</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#依賴"><span class="toc-number">1.1.</span> <span class="toc-text">依賴</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#發佈博客"><span class="toc-number">2.</span> <span class="toc-text">發佈博客</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hexo常用命令"><span class="toc-number">3.</span> <span class="toc-text">Hexo常用命令</span></a></li></ol>
+		
 		</div>
 		
-		<p><img src="http://img.freehao123.com/wp-content/uploads/2014/05/github-hexo_00.gif" alt=""></p>
-<h2 id="發佈博客到github-io">發佈博客到github.io</h2><h3 id="依賴">依賴</h3><p>1.首先需要在github上註冊，註冊后創建新的Repository。名字一般為yourname.github.io</p>
-<p>2.打開hexo _config.yml文件,deploy；屬性下配置github地址</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: github</span><br><span class="line">  repository: https://github.com/ztjlovejava/ztjlovejava.github.io.git   <span class="comment">#git託管地址</span></span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
-<h2 id="發佈博客">發佈博客</h2><p>首先在本地生成好站點靜態文件，命令為：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="variable">$hexo</span> g</span><br></pre></td></tr></table></figure>
-<p>同步代碼到git</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="variable">$hexo</span> deploy <span class="comment">#hexo g</span></span><br></pre></td></tr></table></figure>
-<h2 id="Hexo常用命令">Hexo常用命令</h2><p>1.修改博客內容，一般用到<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$hexo</span> g    <span class="comment">#生成靜態資源</span></span><br><span class="line"><span class="variable">$hexo</span> s    <span class="comment">#啟動nodejs服務，本站調試</span></span><br><span class="line"><span class="variable">$hexo</span> d    <span class="comment">#部署到git</span></span><br><span class="line">或者</span><br><span class="line"><span class="variable">$hexo</span> s -g</span><br><span class="line"><span class="variable">$hexo</span> d -g</span><br></pre></td></tr></table></figure></p>
-<p>2.新建博客頁面，例如about頁面。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$hexo</span> new page <span class="string">"about"</span>   <span class="comment">#會在source目錄下生成about\index.md，你可以編輯內容。并在主題配置文件中menu:屬性上添加頁面</span></span><br><span class="line">``` </span><br><span class="line"><span class="number">3</span>.新建文章。</span><br><span class="line"></span><br><span class="line">```bash</span><br><span class="line"><span class="variable">$hexo</span> new <span class="string">"titlename"</span>   <span class="comment">#會生成source\_posts\titlename.md文件。</span></span><br></pre></td></tr></table></figure>  
+		<p>1.列出池下面的镜像情况</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># rbd ls [-l] <span class="title">&lt;pool name&gt;</span></span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>-l 参数类似 ls -l 一样，列出更详细的信息，包括镜像的大小，快照等</p>
+</blockquote>
+<p>2.建立一个镜像</p>
+<figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># rbd create –<span class="keyword">image</span>-<span class="keyword">format</span> <span class="number">2</span> &lt;poolname/imagename&gt;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>-s &lt;镜像大小&gt; #镜像大小的单位是MB,–image-format 一般用2，否则这个镜像不能克隆</p>
+</blockquote>
+<p>3.删除一个镜像</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># rbd rm <span class="title">&lt;poolname/imagename&gt;</span></span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>如果一个镜像有快照，删除时会出错，需要先删除快照</p>
+</blockquote>
+<p>4.修改镜像大小</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># rbd resize <span class="title">&lt;poolname/imagename&gt;</span> -s <span class="title">&lt;镜像大小&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p>5.复制一个镜像</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># rbd cp <span class="title">&lt;srcpoolname/srcimagename&gt;</span> <span class="title">&lt;destpoolname/destimagename&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p>6.导入一个镜像</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># rbd import –image-format 2 <span class="title">&lt;srcpath&gt;</span> <span class="title">&lt;destpoolname/destimagename&gt;</span></span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这个命令可以用来将保存在本地硬盘里的一个文件导入到 ceph 中，比如导致虚拟机的虚拟硬盘</p>
+</blockquote>
+<p>7.导出一个镜像</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># rbd export <span class="title">&lt;srcpoolname/srcimagename&gt;</span> <span class="title">&lt;destpath&gt;</span></span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这个命令可以用来将保存在ceph中的镜像导出到一个本地文件</p>
+</blockquote>
+<p>8.克隆硬盘</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># rbd clone <span class="title">&lt;poolname/imagename@snapshotname&gt;</span> <span class="title">&lt;newpoolname/imagename&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p>9.建立快照</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># rbd snap create &lt;poolname/imagename<span class="yardoctag">@snapshotname</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>如 rbd snap create testpool/testimg@snap1 表示给 testpool/testimg 这个镜像建立一个名叫 snap1 的快照</p>
+</blockquote>
+<p>10.快照 保护/去掉保护</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># rbd snap protect &lt;poolname/imagename<span class="yardoctag">@snapshotname</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>保护快照，只有在保护状态下的快照才可以用来克隆出新的镜像</p>
+</blockquote>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># rbd snap unprotect &lt;poolname/imagename<span class="yardoctag">@snapshotname</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>只有在非保护状态下的快照，才可以删除</p>
+</blockquote>
+<p>11.删除一个快照</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># rbd snap rm &lt;poolname/imagename<span class="yardoctag">@snapshotname</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>12.将某个镜像回滚到某个快照时的状态</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># rbd snap rollback &#60;poolname/imagename@snapshotname&#62;</span><br></pre></td></tr></table></figure>
+<p>13.将一个镜像的全部快照都删除</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># rbd snap purge <span class="title">&lt;poolname/imagename&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p>14.列出某个镜像有哪些快照</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># rbd snap ls <span class="title">&lt;poolname/imagename&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p>15.格式转换</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># qemu-img convert -f vpc tedt.vhd -O raw rbd:<span class="title">&lt;VM名字&gt;</span>/disk1</span></span><br></pre></td></tr></table></figure>
+<p>16.拍平克隆硬盘，重新copy</p>
+<figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># rbd flatten</span></span><br></pre></td></tr></table></figure>
+<p>17.查看rbd信息</p>
+<figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># rbd info poolname/rbdimg</span></span><br></pre></td></tr></table></figure>
+<p>18.查看rbd实际占用大小</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># rbd diff poolname/rbdimg | awk '&#123; <span class="keyword">SUM</span> += <span class="label">$2</span> &#125; END &#123; <span class="keyword">print</span> <span class="keyword">SUM</span>/1024/1024 <span class="string">" MB"</span> &#125;'</span><br></pre></td></tr></table></figure>  
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/hexo/">hexo</a>
+  <span></span> <a href="/tags/ceph-rbd/">ceph rbd</a>
   </div>
 
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/hexo/">hexo</a>
+  <a class="article-category-link" href="/categories/ceph/">ceph</a>
 </div>
 
 
 
 <div class="article-share" id="share">
 
-  <div data-url="https://ztjlovejava.github.io/2015/01/04/hello-hexo-2/" data-title="用Hexo構建個性化博客(續) | I have a dream" data-tsina="null" class="share clearfix">
+  <div data-url="https://ztjlovejava.github.io/2015/03/29/Ceph-rbd-cmd/" data-title="ceph-rbd 常用命令 | I have a dream" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -131,14 +185,14 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/01/06/hello-world/" title="用Hexo構建個性化博客">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  用Hexo構建個性化博客</span>
+
+<div class="next">
+<a href="/2015/03/28/rbd-librbd/"  title="ceph-rbd环境配置(二)之qemu-rbd">
+ <strong>NEXT:</strong><br/> 
+ <span>ceph-rbd环境配置(二)之qemu-rbd
+</span>
 </a>
 </div>
-
 
 </nav>
 
@@ -152,7 +206,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#發佈博客到github-io"><span class="toc-number">1.</span> <span class="toc-text">發佈博客到github.io</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#依賴"><span class="toc-number">1.1.</span> <span class="toc-text">依賴</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#發佈博客"><span class="toc-number">2.</span> <span class="toc-text">發佈博客</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hexo常用命令"><span class="toc-number">3.</span> <span class="toc-text">Hexo常用命令</span></a></li></ol>
+  
   </div>
 
 <div id="asidepart">
