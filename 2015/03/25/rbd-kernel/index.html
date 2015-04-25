@@ -79,7 +79,7 @@
     </p>
   <p class="article-time">
     <time datetime="2015-03-25T09:12:33.000Z" itemprop="datePublished">Mar 25 2015</time>
-    更新日期:<time datetime="2015-04-25T12:37:04.000Z" itemprop="dateModified">Apr 25 2015</time>
+    更新日期:<time datetime="2015-04-25T13:55:24.000Z" itemprop="dateModified">Apr 25 2015</time>
     
   </p>
 </header>
@@ -88,7 +88,7 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#客户端安装ceph"><span class="toc-number">1.</span> <span class="toc-text">客户端安装ceph</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#升级客户端内核"><span class="toc-number">2.</span> <span class="toc-text">升级客户端内核</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ceph块设备快速体验"><span class="toc-number">3.</span> <span class="toc-text">ceph块设备快速体验</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建块设备镜像"><span class="toc-number">3.1.</span> <span class="toc-text">创建块设备镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#将镜像映射到块设备"><span class="toc-number">3.2.</span> <span class="toc-text">将镜像映射到块设备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#格式化块设备"><span class="toc-number">3.3.</span> <span class="toc-text">格式化块设备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#挂载该设备"><span class="toc-number">3.4.</span> <span class="toc-text">挂载该设备</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#附录A_linux内核源码编译"><span class="toc-number">4.</span> <span class="toc-text">附录A linux内核源码编译</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#客户端安装ceph"><span class="toc-number">1.</span> <span class="toc-text">客户端安装ceph</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#升级客户端内核"><span class="toc-number">2.</span> <span class="toc-text">升级客户端内核</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ceph块设备快速体验"><span class="toc-number">3.</span> <span class="toc-text">ceph块设备快速体验</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建块设备镜像"><span class="toc-number">3.1.</span> <span class="toc-text">创建块设备镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#将镜像映射到块设备"><span class="toc-number">3.2.</span> <span class="toc-text">将镜像映射到块设备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#格式化块设备"><span class="toc-number">3.3.</span> <span class="toc-text">格式化块设备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#挂载该设备"><span class="toc-number">3.4.</span> <span class="toc-text">挂载该设备</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#附录A_linux内核源码编译"><span class="toc-number">4.</span> <span class="toc-text">附录A linux内核源码编译</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-number">5.</span> <span class="toc-text">参考文献</span></a></li></ol>
 		</div>
 		
 		<p><img src="http://42.62.73.30/wordpress/wp-content/uploads/2013/09/ceph-architecture.png" alt=""><br><a href="http://www.ceph.com/" target="_blank" rel="external">Ceph</a>提供统一、高性能、高可用的分布式存储服务。所谓统一存储即支持对象存储（OBS）、块存储（EBS）、文件存储。本章主要介绍块存储的环境搭建。块存储即ceph -rbd,如上图所示，rbd是基于librados提供块设备接口。有两种具体的实现:一是Linux kernel直接调用librados访问块设备，二是利用kvm/qemu调用librbd来访问块设备。两种方式都需要与rados集群通信，因此需要在client安装ceph。</p>
@@ -106,7 +106,9 @@
 <blockquote>
 <p>若上述步骤没有错误，接着下面的命令</p>
 </blockquote>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># vim /etc/grub.conf 	<span class="comment">//将 default=1 改为 default=0</span></span></span><br><span class="line"><span class="preprocessor"># reboot     <span class="comment">//重启系统,并查看内核</span></span></span><br><span class="line"><span class="preprocessor"># uname –r 		<span class="comment">//查看内核版本</span></span></span><br></pre></td></tr></table></figure>  
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># vim /etc/grub.conf 	<span class="comment">//将 default=1 改为 default=0</span></span></span><br><span class="line"><span class="preprocessor"># reboot     <span class="comment">//重启系统,并查看内核</span></span></span><br><span class="line"><span class="preprocessor"># uname –r 		<span class="comment">//查看内核版本</span></span></span><br></pre></td></tr></table></figure>
+<h2 id="参考文献">参考文献</h2><p>1: <a href="http://ceph.com/docs/master/rbd/rbd-ko/" target="_blank" rel="external">http://ceph.com/docs/master/rbd/rbd-ko/</a></p>
+  
 	</div>
 		<footer class="article-footer clearfix">
 
@@ -134,6 +136,14 @@
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2015/03/28/rbd-librbd/" title="qemu-rbd 环境配置">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  qemu-rbd 环境配置</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2015/01/06/hello-world/"  title="用Hexo構建個性化博客">
@@ -155,7 +165,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#客户端安装ceph"><span class="toc-number">1.</span> <span class="toc-text">客户端安装ceph</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#升级客户端内核"><span class="toc-number">2.</span> <span class="toc-text">升级客户端内核</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ceph块设备快速体验"><span class="toc-number">3.</span> <span class="toc-text">ceph块设备快速体验</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建块设备镜像"><span class="toc-number">3.1.</span> <span class="toc-text">创建块设备镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#将镜像映射到块设备"><span class="toc-number">3.2.</span> <span class="toc-text">将镜像映射到块设备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#格式化块设备"><span class="toc-number">3.3.</span> <span class="toc-text">格式化块设备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#挂载该设备"><span class="toc-number">3.4.</span> <span class="toc-text">挂载该设备</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#附录A_linux内核源码编译"><span class="toc-number">4.</span> <span class="toc-text">附录A linux内核源码编译</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#客户端安装ceph"><span class="toc-number">1.</span> <span class="toc-text">客户端安装ceph</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#升级客户端内核"><span class="toc-number">2.</span> <span class="toc-text">升级客户端内核</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ceph块设备快速体验"><span class="toc-number">3.</span> <span class="toc-text">ceph块设备快速体验</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建块设备镜像"><span class="toc-number">3.1.</span> <span class="toc-text">创建块设备镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#将镜像映射到块设备"><span class="toc-number">3.2.</span> <span class="toc-text">将镜像映射到块设备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#格式化块设备"><span class="toc-number">3.3.</span> <span class="toc-text">格式化块设备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#挂载该设备"><span class="toc-number">3.4.</span> <span class="toc-text">挂载该设备</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#附录A_linux内核源码编译"><span class="toc-number">4.</span> <span class="toc-text">附录A linux内核源码编译</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-number">5.</span> <span class="toc-text">参考文献</span></a></li></ol>
   </div>
 
 <div id="asidepart">
@@ -167,7 +177,7 @@
 	<p class="asidetitle">分類</p>
 		<ul>
 		
-			<li><a href="/categories/ceph/" title="ceph">ceph<sup>1</sup></a></li>
+			<li><a href="/categories/ceph/" title="ceph">ceph<sup>2</sup></a></li>
 		
 			<li><a href="/categories/hexo/" title="hexo">hexo<sup>2</sup></a></li>
 		
@@ -180,7 +190,7 @@
 	<p class="asidetitle">標簽</p>
 		<ul class="clearfix">
 		
-			<li><a href="/tags/ceph-rbd/" title="ceph rbd">ceph rbd<sup>1</sup></a></li>
+			<li><a href="/tags/ceph-rbd/" title="ceph rbd">ceph rbd<sup>2</sup></a></li>
 		
 			<li><a href="/tags/hexo/" title="hexo">hexo<sup>2</sup></a></li>
 		
@@ -196,6 +206,10 @@
 <div class="widget tag">
   <h3 class="title">近期文章</h3>
   <ul class="entry">
+    
+      <li>
+        <a href="/2015/03/28/rbd-librbd/">qemu-rbd 环境配置</a>
+      </li>
     
       <li>
         <a href="/2015/03/25/rbd-kernel/">ceph-rbd环境配置之Linux kernel</a>
