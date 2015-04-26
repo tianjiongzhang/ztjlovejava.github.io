@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>ceph-rbd环境配置(二)之qemu-rbd | I have a dream</title>
+    <title>[原创]ceph-rbd环境配置(二)之qemu-rbd | I have a dream</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="ztjlovejava">
@@ -71,7 +71,7 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/03/28/rbd-librbd/" title="ceph-rbd环境配置(二)之qemu-rbd" itemprop="url">ceph-rbd环境配置(二)之qemu-rbd</a>
+      <a href="/2015/03/28/rbd-librbd/" title="[原创]ceph-rbd环境配置(二)之qemu-rbd" itemprop="url">[原创]ceph-rbd环境配置(二)之qemu-rbd</a>
   </h1>
   <p class="article-author">By
     
@@ -79,7 +79,7 @@
     </p>
   <p class="article-time">
     <time datetime="2015-03-28T14:00:45.000Z" itemprop="datePublished">Mar 28 2015</time>
-    更新日期:<time datetime="2015-04-25T14:57:30.000Z" itemprop="dateModified">Apr 25 2015</time>
+    更新日期:<time datetime="2015-04-26T05:23:44.000Z" itemprop="dateModified">Apr 26 2015</time>
     
   </p>
 </header>
@@ -91,7 +91,8 @@
 		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装环境"><span class="toc-number">1.</span> <span class="toc-text">安装环境</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装qemu(高版本)"><span class="toc-number">1.1.</span> <span class="toc-text">安装qemu(高版本)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装_libvirt"><span class="toc-number">1.2.</span> <span class="toc-text">安装 libvirt</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建rbd镜像"><span class="toc-number">2.</span> <span class="toc-text">创建rbd镜像</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#利用libvirt创建虚拟机"><span class="toc-number">3.</span> <span class="toc-text">利用libvirt创建虚拟机</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建虚拟机配置文件"><span class="toc-number">3.1.</span> <span class="toc-text">创建虚拟机配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建虚拟机"><span class="toc-number">3.2.</span> <span class="toc-text">创建虚拟机</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参考文献"><span class="toc-number">3.3.</span> <span class="toc-text">参考文献</span></a></li></ol></li></ol>
 		</div>
 		
-		<p><img src="http://www.wzxue.com/wp-content/uploads/2014/06/QQ20140613-2.png" alt=""><br>上一篇文章讲了Ceph rbd为主机提供块设备的配置，本篇继续分享Ceph rbd为虚拟机提供块设备的配置。如上图所示：qemu调用librbd为虚拟机提供虚拟块设备，为了能够创建和管理虚拟机，需要安装libvirt。libvirt提供管理各种虚拟机通用接口，支持命令和图形方式（需安装virtmanage）。</p>
+		<p><img src="http://www.wzxue.com/wp-content/uploads/2014/06/QQ20140613-2.png" alt=""></p>
+<p>上一篇文章讲了Ceph rbd为主机提供块设备的配置，本篇继续分享Ceph rbd为虚拟机提供块设备的配置。如上图所示：qemu调用librbd为虚拟机提供虚拟块设备，为了能够创建和管理虚拟机，需要安装libvirt。libvirt提供管理各种虚拟机通用接口，支持命令和图形方式（需安装virtmanage）。</p>
 <h2 id="安装环境">安装环境</h2><h3 id="安装qemu(高版本)">安装qemu(高版本)</h3><figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># tar –jxvf qemu2.1.3.tar.bz</span></span><br><span class="line"><span class="preprocessor"># cd qemu 2.1.3</span></span><br><span class="line"><span class="preprocessor"># ./configure --enable-rbd #这里很重要，不然qemu无法识别rbd</span></span><br><span class="line"><span class="preprocessor"># make</span></span><br><span class="line"><span class="preprocessor"># make install</span></span><br></pre></td></tr></table></figure>
 <h3 id="安装_libvirt">安装 libvirt</h3><figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># yum install libvirt</span></span><br></pre></td></tr></table></figure>
 <h2 id="创建rbd镜像">创建rbd镜像</h2><blockquote>
@@ -124,7 +125,7 @@
 
 <div class="article-share" id="share">
 
-  <div data-url="https://ztjlovejava.github.io/2015/03/28/rbd-librbd/" data-title="ceph-rbd环境配置(二)之qemu-rbd | I have a dream" data-tsina="null" class="share clearfix">
+  <div data-url="https://ztjlovejava.github.io/2015/03/28/rbd-librbd/" data-title="[原创]ceph-rbd环境配置(二)之qemu-rbd | I have a dream" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -134,18 +135,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2015/03/29/Ceph-rbd-cmd/" title="ceph-rbd 常用命令">
+ <a href="/2015/03/29/Ceph-rbd-cmd/" title="[原创]ceph-rbd 常用命令">
   <strong>PREVIOUS:</strong><br/>
   <span>
-  ceph-rbd 常用命令</span>
+  [原创]ceph-rbd 常用命令</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2015/03/25/rbd-kernel/"  title="ceph-rbd环境配置(一)之Linux kernel">
+<a href="/2015/03/25/rbd-kernel/"  title="[原创]ceph-rbd环境配置(一)之linux kernel">
  <strong>NEXT:</strong><br/> 
- <span>ceph-rbd环境配置(一)之Linux kernel
+ <span>[原创]ceph-rbd环境配置(一)之linux kernel
 </span>
 </a>
 </div>
@@ -174,7 +175,7 @@
 	<p class="asidetitle">分類</p>
 		<ul>
 		
-			<li><a href="/categories/ceph/" title="ceph">ceph<sup>3</sup></a></li>
+			<li><a href="/categories/ceph/" title="ceph">ceph<sup>5</sup></a></li>
 		
 			<li><a href="/categories/hexo/" title="hexo">hexo<sup>2</sup></a></li>
 		
@@ -187,7 +188,7 @@
 	<p class="asidetitle">標簽</p>
 		<ul class="clearfix">
 		
-			<li><a href="/tags/ceph-rbd/" title="ceph rbd">ceph rbd<sup>3</sup></a></li>
+			<li><a href="/tags/ceph-rbd/" title="ceph rbd">ceph rbd<sup>5</sup></a></li>
 		
 			<li><a href="/tags/hexo/" title="hexo">hexo<sup>2</sup></a></li>
 		
@@ -205,23 +206,23 @@
   <ul class="entry">
     
       <li>
-        <a href="/2015/03/29/Ceph-rbd-cmd/">ceph-rbd 常用命令</a>
+        <a href="/2015/04/23/rbd-data-on-osd/">[原创]查看rbd镜像存放osd的位置 </a>
       </li>
     
       <li>
-        <a href="/2015/03/28/rbd-librbd/">ceph-rbd环境配置(二)之qemu-rbd</a>
+        <a href="/2015/04/02/rbd-nfs/">[原创]基于ceph-rbd的文件共享服务</a>
       </li>
     
       <li>
-        <a href="/2015/03/25/rbd-kernel/">ceph-rbd环境配置(一)之Linux kernel</a>
+        <a href="/2015/03/29/Ceph-rbd-cmd/">[原创]ceph-rbd 常用命令</a>
       </li>
     
       <li>
-        <a href="/2015/01/06/hello-world/">用Hexo構建個性化博客</a>
+        <a href="/2015/03/28/rbd-librbd/">[原创]ceph-rbd环境配置(二)之qemu-rbd</a>
       </li>
     
       <li>
-        <a href="/2015/01/04/hello-hexo-2/">用Hexo構建個性化博客(續)</a>
+        <a href="/2015/03/25/rbd-kernel/">[原创]ceph-rbd环境配置(一)之linux kernel</a>
       </li>
     
   </ul>

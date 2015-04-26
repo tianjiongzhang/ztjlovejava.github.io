@@ -4,14 +4,13 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>[原创]用Hexo構建個性化博客(續) | I have a dream</title>
+    <title>[原创]查看rbd镜像存放osd的位置  | I have a dream</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="ztjlovejava">
     
-    <meta name="description" content="發佈博客到github.io依賴1.首先需要在github上註冊，註冊后創建新的Repository。名字一般為yourname.github.io
-2.打開hexo _config.yml文件,deploy；屬性下配置github地址
-12345deploy:  type: github  rep">
+    <meta name="description" content="序言  无论是对象存储还是块存储，Ceph 客户端都是将文件进行条带化后存于osd上。在分析rbd快照和克隆原理时，需要观察块设备镜像文件的变化。要想知道镜像存放的具体位置？请接着看下去…
+创建1G大小块镜像12345678# rados mkpool testpool  # rbd create ">
     
     
     
@@ -73,15 +72,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/01/04/hello-hexo-2/" title="[原创]用Hexo構建個性化博客(續)" itemprop="url">[原创]用Hexo構建個性化博客(續)</a>
+      <a href="/2015/04/23/rbd-data-on-osd/" title="[原创]查看rbd镜像存放osd的位置 " itemprop="url">[原创]查看rbd镜像存放osd的位置 </a>
   </h1>
   <p class="article-author">By
     
       <a href="https://ztjlovejava.github.io" title="ztjlovejava">ztjlovejava</a>
     </p>
   <p class="article-time">
-    <time datetime="2015-01-04T13:27:27.000Z" itemprop="datePublished">Jan 4 2015</time>
-    更新日期:<time datetime="2015-04-26T05:24:58.000Z" itemprop="dateModified">Apr 26 2015</time>
+    <time datetime="2015-04-23T14:00:45.000Z" itemprop="datePublished">Apr 23 2015</time>
+    更新日期:<time datetime="2015-04-26T06:20:22.000Z" itemprop="dateModified">Apr 26 2015</time>
     
   </p>
 </header>
@@ -90,39 +89,40 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#發佈博客到github-io"><span class="toc-number">1.</span> <span class="toc-text">發佈博客到github.io</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#依賴"><span class="toc-number">1.1.</span> <span class="toc-text">依賴</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#發佈博客"><span class="toc-number">2.</span> <span class="toc-text">發佈博客</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hexo常用命令"><span class="toc-number">3.</span> <span class="toc-text">Hexo常用命令</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#序言"><span class="toc-number">1.</span> <span class="toc-text">序言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建1G大小块镜像"><span class="toc-number">2.</span> <span class="toc-text">创建1G大小块镜像</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查看镜像映射位置"><span class="toc-number">3.</span> <span class="toc-text">查看镜像映射位置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进入osd-1数据存放目录"><span class="toc-number">4.</span> <span class="toc-text">进入osd.1数据存放目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#向testpool/test里面压10M数据"><span class="toc-number">5.</span> <span class="toc-text">向testpool/test里面压10M数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查看pool:testpool下的对象"><span class="toc-number">6.</span> <span class="toc-text">查看pool:testpool下的对象</span></a></li></ol>
 		</div>
 		
-		<p><img src="http://img.freehao123.com/wp-content/uploads/2014/05/github-hexo_00.gif" alt=""></p>
-<h2 id="發佈博客到github-io">發佈博客到github.io</h2><h3 id="依賴">依賴</h3><p>1.首先需要在github上註冊，註冊后創建新的Repository。名字一般為yourname.github.io</p>
-<p>2.打開hexo _config.yml文件,deploy；屬性下配置github地址</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: github</span><br><span class="line">  repository: https://github.com/ztjlovejava/ztjlovejava.github.io.git   <span class="comment">#git託管地址</span></span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
-<h2 id="發佈博客">發佈博客</h2><p>首先在本地生成好站點靜態文件，命令為：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="variable">$hexo</span> g</span><br></pre></td></tr></table></figure>
-<p>同步代碼到git</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="variable">$hexo</span> deploy <span class="comment">#hexo g</span></span><br></pre></td></tr></table></figure>
-<h2 id="Hexo常用命令">Hexo常用命令</h2><p>1.修改博客內容，一般用到<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$hexo</span> g    <span class="comment">#生成靜態資源</span></span><br><span class="line"><span class="variable">$hexo</span> s    <span class="comment">#啟動nodejs服務，本站調試</span></span><br><span class="line"><span class="variable">$hexo</span> d    <span class="comment">#部署到git</span></span><br><span class="line">或者</span><br><span class="line"><span class="variable">$hexo</span> s -g</span><br><span class="line"><span class="variable">$hexo</span> d -g</span><br></pre></td></tr></table></figure></p>
-<p>2.新建博客頁面，例如about頁面。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$hexo</span> new page <span class="string">"about"</span>   <span class="comment">#會在source目錄下生成about\index.md，你可以編輯內容。并在主題配置文件中menu:屬性上添加頁面</span></span><br><span class="line">``` </span><br><span class="line"><span class="number">3</span>.新建文章。</span><br><span class="line"></span><br><span class="line">```bash</span><br><span class="line"><span class="variable">$hexo</span> new <span class="string">"titlename"</span>   <span class="comment">#會生成source\_posts\titlename.md文件。</span></span><br></pre></td></tr></table></figure>  
+		<h2 id="序言">序言</h2><p>  无论是对象存储还是块存储，Ceph 客户端都是将文件进行条带化后存于osd上。在分析rbd快照和克隆原理时，需要观察块设备镜像文件的变化。要想知道镜像存放的具体位置？请接着看下去…</p>
+<h2 id="创建1G大小块镜像">创建1G大小块镜像</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># rados mkpool testpool  </span><br><span class="line"># rbd <span class="operator"><span class="keyword">create</span> testpool/test <span class="comment">--size 1024</span></span><br><span class="line"># rbd info testpool/test</span><br><span class="line">	rbd image <span class="string">'test'</span>:</span><br><span class="line">	<span class="keyword">size</span> <span class="number">1024</span> MB <span class="keyword">in</span> <span class="number">256</span> objects </span><br><span class="line">	<span class="keyword">order</span> <span class="number">22</span> (<span class="number">4096</span> kB objects) </span><br><span class="line">	block_name_prefix: rb.0.fbe4e.2ae8944a </span><br><span class="line">	<span class="keyword">format</span>: <span class="number">1</span></span></span><br></pre></td></tr></table></figure>
+<h2 id="查看镜像映射位置">查看镜像映射位置</h2><figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ceph osd map testpool rb.0.fbe4e.2ae8944a.000000000000    //块设备首地址</span></span><br><span class="line">	osdmap e50 pool <span class="string">'testpool'</span> (<span class="number">15</span>) object <span class="string">'rb.0.fbe4e.2ae8944a.00000000'</span><span class="function"> -&gt;</span></span><br><span class="line">	pg <span class="number">15.5cf</span>0bd7d <span class="function"><span class="params">(<span class="number">15.3d</span>)</span> -&gt;</span> up ([<span class="number">1</span>,<span class="number">0</span>], p1) acting ([<span class="number">1</span>,<span class="number">0</span>], p1)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>说明：数据存放目录为15.3d._head  primary osd=1  replicate osd=1</p>
+</blockquote>
+<h2 id="进入osd-1数据存放目录">进入osd.1数据存放目录</h2><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># cd <span class="regexp">/var/</span>lib<span class="regexp">/ceph/</span>osd<span class="regexp">/ceph-1/</span>current/<span class="number">15.3</span>e_head ;ll</span><br><span class="line">  -rw-r--r-- <span class="number">1</span> root root <span class="number">4194304</span> Mar <span class="number">12</span> <span class="number">14</span>:<span class="number">14</span> rb.0.fbe4e.2ae8944a.000000000000__head_3154DE7E__f</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>一个文件默认为4M,对象的命名方式会在深入分析rbd文章中讲到,敬请期待</p>
+</blockquote>
+<h2 id="向testpool/test里面压10M数据">向testpool/test里面压10M数据</h2>  <figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># dd <span class="keyword">if</span>=<span class="regexp">/dev/</span>zero of=<span class="regexp">/dev/</span>rbd<span class="regexp">/testpool/</span>test bs=<span class="number">1</span>M <span class="keyword">count</span>=<span class="number">10</span></span><br></pre></td></tr></table></figure>
+<h2 id="查看pool:testpool下的对象">查看pool:testpool下的对象</h2> <figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># rados ls -p </span></span><br><span class="line">rb.0.fbe4e.2ae8944a.000000000000</span><br><span class="line">rb.0.fbe4e.2ae8944a.00000000002c</span><br><span class="line">rb.0.fbe4e.2ae8944a.000000000038</span><br><span class="line">rb.0.fbe4e.2ae8944a.000000000073</span><br></pre></td></tr></table></figure>  
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/hexo/">hexo</a>
+  <span></span> <a href="/tags/ceph-rbd/">ceph rbd</a>
   </div>
 
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/hexo/">hexo</a>
+  <a class="article-category-link" href="/categories/ceph/">ceph</a>
 </div>
 
 
 
 <div class="article-share" id="share">
 
-  <div data-url="https://ztjlovejava.github.io/2015/01/04/hello-hexo-2/" data-title="[原创]用Hexo構建個性化博客(續) | I have a dream" data-tsina="null" class="share clearfix">
+  <div data-url="https://ztjlovejava.github.io/2015/04/23/rbd-data-on-osd/" data-title="[原创]查看rbd镜像存放osd的位置  | I have a dream" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -131,14 +131,14 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/01/06/hello-world/" title="[原创]用Hexo構建個性化博客">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  [原创]用Hexo構建個性化博客</span>
+
+<div class="next">
+<a href="/2015/04/02/rbd-nfs/"  title="[原创]基于ceph-rbd的文件共享服务">
+ <strong>NEXT:</strong><br/> 
+ <span>[原创]基于ceph-rbd的文件共享服务
+</span>
 </a>
 </div>
-
 
 </nav>
 
@@ -152,7 +152,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#發佈博客到github-io"><span class="toc-number">1.</span> <span class="toc-text">發佈博客到github.io</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#依賴"><span class="toc-number">1.1.</span> <span class="toc-text">依賴</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#發佈博客"><span class="toc-number">2.</span> <span class="toc-text">發佈博客</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hexo常用命令"><span class="toc-number">3.</span> <span class="toc-text">Hexo常用命令</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#序言"><span class="toc-number">1.</span> <span class="toc-text">序言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建1G大小块镜像"><span class="toc-number">2.</span> <span class="toc-text">创建1G大小块镜像</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查看镜像映射位置"><span class="toc-number">3.</span> <span class="toc-text">查看镜像映射位置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进入osd-1数据存放目录"><span class="toc-number">4.</span> <span class="toc-text">进入osd.1数据存放目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#向testpool/test里面压10M数据"><span class="toc-number">5.</span> <span class="toc-text">向testpool/test里面压10M数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查看pool:testpool下的对象"><span class="toc-number">6.</span> <span class="toc-text">查看pool:testpool下的对象</span></a></li></ol>
   </div>
 
 <div id="asidepart">

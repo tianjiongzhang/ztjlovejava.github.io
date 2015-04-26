@@ -4,14 +4,13 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>[原创]用Hexo構建個性化博客(續) | I have a dream</title>
+    <title>[原创]基于ceph-rbd的文件共享服务 | I have a dream</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="ztjlovejava">
     
-    <meta name="description" content="發佈博客到github.io依賴1.首先需要在github上註冊，註冊后創建新的Repository。名字一般為yourname.github.io
-2.打開hexo _config.yml文件,deploy；屬性下配置github地址
-12345deploy:  type: github  rep">
+    <meta name="description" content="Ceph rbd可以为主机提供块设备，利用块设备我们可以自己实现一套简单的文件共享服务。本文介绍基于rbd的文件共享环境搭建,原理很简单，将ceph client主机作为NFS服务器（类似NAS机头），将rbd映射的块设备作为共享文件目录，然后通过NFS协议共享给网络中其他主机。
+依赖环境   1.">
     
     
     
@@ -73,15 +72,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/01/04/hello-hexo-2/" title="[原创]用Hexo構建個性化博客(續)" itemprop="url">[原创]用Hexo構建個性化博客(續)</a>
+      <a href="/2015/04/02/rbd-nfs/" title="[原创]基于ceph-rbd的文件共享服务" itemprop="url">[原创]基于ceph-rbd的文件共享服务</a>
   </h1>
   <p class="article-author">By
     
       <a href="https://ztjlovejava.github.io" title="ztjlovejava">ztjlovejava</a>
     </p>
   <p class="article-time">
-    <time datetime="2015-01-04T13:27:27.000Z" itemprop="datePublished">Jan 4 2015</time>
-    更新日期:<time datetime="2015-04-26T05:24:58.000Z" itemprop="dateModified">Apr 26 2015</time>
+    <time datetime="2015-04-02T04:33:24.000Z" itemprop="datePublished">Apr 2 2015</time>
+    更新日期:<time datetime="2015-04-26T05:25:26.000Z" itemprop="dateModified">Apr 26 2015</time>
     
   </p>
 </header>
@@ -90,39 +89,43 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#發佈博客到github-io"><span class="toc-number">1.</span> <span class="toc-text">發佈博客到github.io</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#依賴"><span class="toc-number">1.1.</span> <span class="toc-text">依賴</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#發佈博客"><span class="toc-number">2.</span> <span class="toc-text">發佈博客</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hexo常用命令"><span class="toc-number">3.</span> <span class="toc-text">Hexo常用命令</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#依赖环境"><span class="toc-number">1.</span> <span class="toc-text">依赖环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ceph-clinet创建rbd块设备"><span class="toc-number">2.</span> <span class="toc-text">ceph-clinet创建rbd块设备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NFS服务器端配置"><span class="toc-number">3.</span> <span class="toc-text">NFS服务器端配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#启动NFS服务"><span class="toc-number">4.</span> <span class="toc-text">启动NFS服务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#客户端挂载（网段为10-20-*-*的任意主机）"><span class="toc-number">5.</span> <span class="toc-text">客户端挂载（网段为10.20.*.*的任意主机）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol>
 		</div>
 		
-		<p><img src="http://img.freehao123.com/wp-content/uploads/2014/05/github-hexo_00.gif" alt=""></p>
-<h2 id="發佈博客到github-io">發佈博客到github.io</h2><h3 id="依賴">依賴</h3><p>1.首先需要在github上註冊，註冊后創建新的Repository。名字一般為yourname.github.io</p>
-<p>2.打開hexo _config.yml文件,deploy；屬性下配置github地址</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: github</span><br><span class="line">  repository: https://github.com/ztjlovejava/ztjlovejava.github.io.git   <span class="comment">#git託管地址</span></span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
-<h2 id="發佈博客">發佈博客</h2><p>首先在本地生成好站點靜態文件，命令為：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="variable">$hexo</span> g</span><br></pre></td></tr></table></figure>
-<p>同步代碼到git</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="variable">$hexo</span> deploy <span class="comment">#hexo g</span></span><br></pre></td></tr></table></figure>
-<h2 id="Hexo常用命令">Hexo常用命令</h2><p>1.修改博客內容，一般用到<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$hexo</span> g    <span class="comment">#生成靜態資源</span></span><br><span class="line"><span class="variable">$hexo</span> s    <span class="comment">#啟動nodejs服務，本站調試</span></span><br><span class="line"><span class="variable">$hexo</span> d    <span class="comment">#部署到git</span></span><br><span class="line">或者</span><br><span class="line"><span class="variable">$hexo</span> s -g</span><br><span class="line"><span class="variable">$hexo</span> d -g</span><br></pre></td></tr></table></figure></p>
-<p>2.新建博客頁面，例如about頁面。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$hexo</span> new page <span class="string">"about"</span>   <span class="comment">#會在source目錄下生成about\index.md，你可以編輯內容。并在主題配置文件中menu:屬性上添加頁面</span></span><br><span class="line">``` </span><br><span class="line"><span class="number">3</span>.新建文章。</span><br><span class="line"></span><br><span class="line">```bash</span><br><span class="line"><span class="variable">$hexo</span> new <span class="string">"titlename"</span>   <span class="comment">#會生成source\_posts\titlename.md文件。</span></span><br></pre></td></tr></table></figure>  
+		<p>Ceph rbd可以为主机提供块设备，利用块设备我们可以自己实现一套简单的文件共享服务。本文介绍基于rbd的文件共享环境搭建,原理很简单，将ceph client主机作为NFS服务器（类似NAS机头），将rbd映射的块设备作为共享文件目录，然后通过NFS协议共享给网络中其他主机。</p>
+<h2 id="依赖环境">依赖环境</h2><p>   1.首先ceph client主机内核支持rados block driver,如不支持请参考<a href="http://ztjlovejava.github.io/2015/03/25/rbd-kernel/" target="_blank" rel="external">ceph-rbd环境配置(一)之Linux kernel</a>。<br>   2.检查client主机是否已经支持NFS。</p>
+   <figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># rpm -qa | grep nfs</span></span><br></pre></td></tr></table></figure>
+<p>   3.安装NFS</p>
+   <figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># yum -y install nfs-utils rpcbind</span></span><br><span class="line"><span class="preprocessor"># yum install nfs-utils</span></span><br></pre></td></tr></table></figure>
+<h2 id="ceph-clinet创建rbd块设备">ceph-clinet创建rbd块设备</h2>   <figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># rados mkpool shareimage    //创建单独共享的pool</span></span><br><span class="line"><span class="preprocessor"># rbd create shareimage/share1 --size 10240 </span></span><br><span class="line"><span class="preprocessor"># rbd map shareimage/share1</span></span><br><span class="line"><span class="preprocessor"># rbd showmapped</span></span><br><span class="line"><span class="preprocessor"># mkfs.ext4 -m0 /dev/rbd/shareimage/share1 </span></span><br><span class="line"><span class="preprocessor"># mkdir /mnt/nfs-share</span></span><br><span class="line"><span class="preprocessor"># mount -t ext4 /dev/rbd/shareimage/share1  /mnt/nfs-share</span></span><br></pre></td></tr></table></figure>
+<h2 id="NFS服务器端配置">NFS服务器端配置</h2> <figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># vim /etc/exports </span></span><br><span class="line"> /mnt/nfs-share 10.20.<span class="keyword">*</span>.<span class="keyword">*</span>(rw,no_root_squash,no_all_squash,sync)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>配置文件说明:/mnt 为共享的目录，即rbd所挂目录,使用绝对路径。10.20.*.*允许客户端访问的IP,()里面为权限控制。</p>
+</blockquote>
+<h2 id="启动NFS服务">启动NFS服务</h2><figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># service rpcbind start</span></span><br><span class="line"><span class="preprocessor"># service nfs start</span></span><br></pre></td></tr></table></figure>
+<h2 id="客户端挂载（网段为10-20-*-*的任意主机）">客户端挂载（网段为10.20.*.*的任意主机）</h2><figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># mkdir /mnt/remote-share</span></span><br><span class="line"><span class="preprocessor"># showmount -e 10.20.16.177     //10.20.16.177:nfs-server ip</span></span><br><span class="line"><span class="preprocessor"># mount -t nfs /mnt/nfs-share  /mnt/remote-share</span></span><br></pre></td></tr></table></figure>
+<p>多个主机挂载成功便可测试文件的共享。</p>
+<h2 id="参考">参考</h2><p>1:<a href="http://linux.vbird.org/linux_server/0330nfs.php" target="_blank" rel="external">檔案伺服器之一：NFS 伺服器</a></p>
+  
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/hexo/">hexo</a>
+  <span></span> <a href="/tags/ceph-rbd/">ceph rbd</a>
   </div>
 
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/hexo/">hexo</a>
+  <a class="article-category-link" href="/categories/ceph/">ceph</a>
 </div>
 
 
 
 <div class="article-share" id="share">
 
-  <div data-url="https://ztjlovejava.github.io/2015/01/04/hello-hexo-2/" data-title="[原创]用Hexo構建個性化博客(續) | I have a dream" data-tsina="null" class="share clearfix">
+  <div data-url="https://ztjlovejava.github.io/2015/04/02/rbd-nfs/" data-title="[原创]基于ceph-rbd的文件共享服务 | I have a dream" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -132,13 +135,21 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2015/01/06/hello-world/" title="[原创]用Hexo構建個性化博客">
+ <a href="/2015/04/23/rbd-data-on-osd/" title="[原创]查看rbd镜像存放osd的位置 ">
   <strong>PREVIOUS:</strong><br/>
   <span>
-  [原创]用Hexo構建個性化博客</span>
+  [原创]查看rbd镜像存放osd的位置 </span>
 </a>
 </div>
 
+
+<div class="next">
+<a href="/2015/03/29/Ceph-rbd-cmd/"  title="[原创]ceph-rbd 常用命令">
+ <strong>NEXT:</strong><br/> 
+ <span>[原创]ceph-rbd 常用命令
+</span>
+</a>
+</div>
 
 </nav>
 
@@ -152,7 +163,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#發佈博客到github-io"><span class="toc-number">1.</span> <span class="toc-text">發佈博客到github.io</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#依賴"><span class="toc-number">1.1.</span> <span class="toc-text">依賴</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#發佈博客"><span class="toc-number">2.</span> <span class="toc-text">發佈博客</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hexo常用命令"><span class="toc-number">3.</span> <span class="toc-text">Hexo常用命令</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#依赖环境"><span class="toc-number">1.</span> <span class="toc-text">依赖环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ceph-clinet创建rbd块设备"><span class="toc-number">2.</span> <span class="toc-text">ceph-clinet创建rbd块设备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NFS服务器端配置"><span class="toc-number">3.</span> <span class="toc-text">NFS服务器端配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#启动NFS服务"><span class="toc-number">4.</span> <span class="toc-text">启动NFS服务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#客户端挂载（网段为10-20-*-*的任意主机）"><span class="toc-number">5.</span> <span class="toc-text">客户端挂载（网段为10.20.*.*的任意主机）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol>
   </div>
 
 <div id="asidepart">

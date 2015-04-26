@@ -70,84 +70,37 @@
 
   <section class="post" itemscope itemprop="blogPost">
   
-    <a href="/2015/04/23/rbd-data-on-osd/" title="[原创]查看rbd镜像存放osd的位置 " itemprop="url">
+    <a href="/2015/01/06/hello-world/" title="[原创]用Hexo構建個性化博客" itemprop="url">
   
-    <h1 itemprop="name">[原创]查看rbd镜像存放osd的位置 </h1>
+    <h1 itemprop="name">[原创]用Hexo構建個性化博客</h1>
     
      
-           <p itemprop="description" >序言  无论是对象存储还是块存储，Ceph 客户端都是将文件进行条带化后存于osd上。在分析rbd快照和克隆原理时，需要观察块设备镜像文件的变化。要想知道镜像存放的具体位置？请接着看下去…
-创建1G大小块镜像12345678# rados mkpool testpool  # r</p>
-        
+       <p itemprop="description" >Hexo是一款快速、功能強大的博客構建框架。通過Hexo提供的命令輕鬆生成美觀、簡潔的個人站點。Hexo是由nodejs開發的靜態資源生成器，本站就是通過修改Hexo主題風格生成靜態網頁。然後託管在github服務器上,由github創建域名和提供訪問服務。</p>
+      
     
-    <time datetime="2015-04-23T14:00:45.000Z" itemprop="datePublished">Apr 23 2015</time>
+    <time datetime="2015-01-06T13:27:27.000Z" itemprop="datePublished">Jan 6 2015</time>
   </a>
 </section>
 
   <section class="post" itemscope itemprop="blogPost">
   
-    <a href="/2015/04/02/rbd-nfs/" title="[原创]基于ceph-rbd的文件共享服务" itemprop="url">
+    <a href="/2015/01/04/hello-hexo-2/" title="[原创]用Hexo構建個性化博客(續)" itemprop="url">
   
-    <h1 itemprop="name">[原创]基于ceph-rbd的文件共享服务</h1>
+    <h1 itemprop="name">[原创]用Hexo構建個性化博客(續)</h1>
     
      
-           <p itemprop="description" >Ceph rbd可以为主机提供块设备，利用块设备我们可以自己实现一套简单的文件共享服务。本文介绍基于rbd的文件共享环境搭建,原理很简单，将ceph client主机作为NFS服务器（类似NAS机头），将rbd映射的块设备作为共享文件目录，然后通过NFS协议共享给网络中其他主机。</p>
+           <p itemprop="description" >發佈博客到github.io依賴1.首先需要在github上註冊，註冊后創建新的Repository。名字一般為yourname.github.io
+2.打開hexo _config.yml文件,deploy；屬性下配置github地址
+12345deploy:  type: g</p>
         
     
-    <time datetime="2015-04-02T04:33:24.000Z" itemprop="datePublished">Apr 2 2015</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2015/03/29/Ceph-rbd-cmd/" title="[原创]ceph-rbd 常用命令" itemprop="url">
-  
-    <h1 itemprop="name">[原创]ceph-rbd 常用命令</h1>
-    
-     
-           <p itemprop="description" >1.列出池下面的镜像情况
-1# rbd ls [-l] &amp;lt;pool name&amp;gt;
-
--l 参数类似 ls -l 一样，列出更详细的信息，包括镜像的大小，快照等
-
-2.建立一个镜像
-1# rbd create –image-format 2 &amp;lt;poolname/im</p>
-        
-    
-    <time datetime="2015-03-29T12:12:33.000Z" itemprop="datePublished">Mar 29 2015</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2015/03/28/rbd-librbd/" title="[原创]ceph-rbd环境配置(二)之qemu-rbd" itemprop="url">
-  
-    <h1 itemprop="name">[原创]ceph-rbd环境配置(二)之qemu-rbd</h1>
-    
-     
-           <p itemprop="description" >上一篇文章讲了Ceph rbd为主机提供块设备的配置，本篇继续分享Ceph rbd为虚拟机提供块设备的配置。如上图所示：qemu调用librbd为虚拟机提供虚拟块设备，为了能够创建和管理虚拟机，需要安装libvirt。libvirt提供管理各种虚拟机通用接口，支持命令和图形方式（</p>
-        
-    
-    <time datetime="2015-03-28T14:00:45.000Z" itemprop="datePublished">Mar 28 2015</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2015/03/25/rbd-kernel/" title="[原创]ceph-rbd环境配置(一)之linux kernel" itemprop="url">
-  
-    <h1 itemprop="name">[原创]ceph-rbd环境配置(一)之linux kernel</h1>
-    
-     
-           <p itemprop="description" >Ceph提供统一、高性能、高可用的分布式存储服务。所谓统一存储即支持对象存储（OBS）、块存储（EBS）、文件存储。本章主要介绍块存储的环境搭建。块存储即ceph -rbd,如上图所示，rbd是基于librados提供块设备接口。有两种具体的实现:一是Linux kernel直接</p>
-        
-    
-    <time datetime="2015-03-25T09:12:33.000Z" itemprop="datePublished">Mar 25 2015</time>
+    <time datetime="2015-01-04T13:27:27.000Z" itemprop="datePublished">Jan 4 2015</time>
   </a>
 </section>
 
 
   <nav id="page-nav" class="clearfix">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
   </nav>
 
 </div>
