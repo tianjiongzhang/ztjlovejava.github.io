@@ -70,6 +70,34 @@
 
   <section class="post" itemscope itemprop="blogPost">
   
+    <a href="/2015/03/28/rbd-librbd/" title="[原创]ceph-rbd环境配置(二)之qemu-rbd" itemprop="url">
+  
+    <h1 itemprop="name">[原创]ceph-rbd环境配置(二)之qemu-rbd</h1>
+    
+     
+           <p itemprop="description" >上一篇文章讲了Ceph rbd为主机提供块设备的配置，本篇继续分享Ceph rbd为虚拟机提供块设备的配置。如上图所示：qemu调用librbd为虚拟机提供虚拟块设备，为了能够创建和管理虚拟机，需要安装libvirt。libvirt提供管理各种虚拟机通用接口，支持命令和图形方式（</p>
+        
+    
+    <time datetime="2015-03-28T14:00:45.000Z" itemprop="datePublished">Mar 28 2015</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2015/03/25/rbd-kernel/" title="[原创]ceph-rbd环境配置(一)之linux kernel" itemprop="url">
+  
+    <h1 itemprop="name">[原创]ceph-rbd环境配置(一)之linux kernel</h1>
+    
+     
+           <p itemprop="description" >Ceph提供统一、高性能、高可用的分布式存储服务。所谓统一存储即支持对象存储（OBS）、块存储（EBS）、文件存储。本章主要介绍块存储的环境搭建。块存储即ceph -rbd,如上图所示，rbd是基于librados提供块设备接口。有两种具体的实现:一是Linux kernel直接</p>
+        
+    
+    <time datetime="2015-03-25T09:12:33.000Z" itemprop="datePublished">Mar 25 2015</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
     <a href="/2015/01/06/hello-world/" title="[原创]用Hexo構建個性化博客" itemprop="url">
   
     <h1 itemprop="name">[原创]用Hexo構建個性化博客</h1>
@@ -115,7 +143,7 @@
 	<p class="asidetitle">分類</p>
 		<ul>
 		
-			<li><a href="/categories/ceph/" title="ceph">ceph<sup>5</sup></a></li>
+			<li><a href="/categories/ceph/" title="ceph">ceph<sup>7</sup></a></li>
 		
 			<li><a href="/categories/hexo/" title="hexo">hexo<sup>2</sup></a></li>
 		
@@ -128,7 +156,7 @@
 	<p class="asidetitle">標簽</p>
 		<ul class="clearfix">
 		
-			<li><a href="/tags/ceph-rbd/" title="ceph rbd">ceph rbd<sup>5</sup></a></li>
+			<li><a href="/tags/ceph-rbd/" title="ceph rbd">ceph rbd<sup>7</sup></a></li>
 		
 			<li><a href="/tags/hexo/" title="hexo">hexo<sup>2</sup></a></li>
 		
@@ -146,7 +174,11 @@
   <ul class="entry">
     
       <li>
-        <a href="/2015/04/23/rbd-data-on-osd/">[原创]查看rbd镜像存放osd的位置 </a>
+        <a href="/2015/04/06/rbd-resize/">[原创]rbd在线扩容</a>
+      </li>
+    
+      <li>
+        <a href="/2015/04/04/rbd-cache-log/">[原创]rbd-cache日志配置</a>
       </li>
     
       <li>
@@ -154,15 +186,11 @@
       </li>
     
       <li>
+        <a href="/2015/04/01/rbd-data-on-osd/">[原创]查看rbd镜像存放osd的位置 </a>
+      </li>
+    
+      <li>
         <a href="/2015/03/29/Ceph-rbd-cmd/">[原创]ceph-rbd 常用命令</a>
-      </li>
-    
-      <li>
-        <a href="/2015/03/28/rbd-librbd/">[原创]ceph-rbd环境配置(二)之qemu-rbd</a>
-      </li>
-    
-      <li>
-        <a href="/2015/03/25/rbd-kernel/">[原创]ceph-rbd环境配置(一)之linux kernel</a>
       </li>
     
   </ul>
